@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<title>Number guessing game</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="index.css">
+<style>
+body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
+.w3-quarter img{margin-bottom: -6px; cursor: pointer}
+.w3-quarter img:hover{opacity: 0.6; transition: 0.3s}
+</style>
+<body class="w3-light-grey">
+
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-bar-block w3-black w3-animate-right w3-top w3-text-light-grey w3-large" style="z-index:3;width:250px;font-weight:bold;display:none;right:0;" id="mySidebar">
+  <a href="index.html" onclick="w3_close()" class="w3-bar-item w3-button w3-center w3-padding-32">CLOSE</a> 
+  <a href="index.html" onclick="w3_close()" class="w3-bar-item w3-button w3-center w3-padding-32">Samita</a> 
+  <a href="index.html" onclick="w3_close()" class="w3-bar-item w3-button w3-center w3-padding-32">Kedkaew</a> 
+  <a href="index.html" onclick="w3_close()" class="w3-bar-item w3-button w3-center w3-padding-32">610610620</a> 
+</nav>
+
+<!-- Top menu on small screens -->
+<header class="w3-container w3-top w3-white w3-xlarge w3-padding-16">
+  <span class="w3-left w3-padding">Number guessing game</span>
+  <a href="javascript:void(0)" class="w3-right w3-button w3-white" onclick="w3_open()">☰</a>
+</header>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main w3-content" style="max-width:1600px;margin-top:83px">
+  
+  
+<!-- Modal for full size images on click-->
+  <div id="modal01" class="w3-modal w3-black" style="padding-top:0" onclick="this.style.display='none'">
+    <span class="w3-button w3-black w3-xlarge w3-display-topright">×</span>
+    <div class="w3-modal-content w3-animate-zoom w3-center w3-transparent w3-padding-64">
+      <img id="img01" class="w3-image">
+      <p id="caption"></p>
+    </div>
+  </div>
+
+<!-- intro -->
+  <div class="w3-container w3-dark-grey w3-center w3-text-light-grey w3-padding-32" id="about">
+    <h4><b>Spend your luck here!</b></h4>
+    <div class="w3-content w3-justify" style="max-width:600px" >
+      <p>I already select a random number between 1 and 100,Do you want to guess what number I'm thinking about? then put number in the box.
+      </p>
+  </div>
+  <div class="chance">
+    <p>Good! you have 10 chance left!</p>
+  </div>
+
+
+
+
+
+<!-- game -->
+  <div class="form">
+    <label for="guessField">Enter a number -> </label><input type="text" id="guessField" class="guessField">
+    <input type="submit" value="ConFirm" class="guessSubmit">
+  </div>
+
+  <div class="resultParas">
+    <p class="guesses"></p>
+    <p class="lastResult"></p>
+    <p class="lowOrHi"></p>
+  </div>
+  
+  <div class="w3-black w3-center w3-padding-24">made by <a>Samita Kedkaew</a></div>
+  <div>
+    <center> <input type="button" class="reset" value="Start new game"></center>
+  </div>
+<!-- End page content -->
+</div>
+<script>
+  let randomNumber = Math.floor(Math.random() * 100) + 1;
+  const guesses = document.querySelector('.guesses');
+  const lastResult = document.querySelector('.lastResult');
+  const lowOrHi = document.querySelector('.lowOrHi');
+  const guessSubmit = document.querySelector('.guessSubmit');
+  const guessField = document.querySelector('.guessField');
+  let guessCount = 1;
+  let resetButton = document.querySelector('.reset');
+  let x = 10;
+  const chance = document.querySelector('.chance');
+  resetButton.style.visibility='hidden';
+
+  function checkGuess() {
+    let userGuess = Number(guessField.value);
+    if (guessCount === 1) {
+      guesses.textContent = 'Previous guesses: ';
+    }
+
+    guesses.textContent += userGuess + ' ';
+
+    if (userGuess === randomNumber) {
+      lastResult.textContent = 'Hard to believe!! you are right!!';
+      chance.textContent = 'you made it!';
+      lastResult.style.backgroundColor = '#27647B';
+      lowOrHi.textContent = '';
+      setGameOver();
+    } else if (guessCount === 10) {
+      lastResult.textContent = '!!!!!KABOOM!!!!!';
+      lowOrHi.textContent = '';
+      setGameOver();
+    } else {
+      lastResult.textContent = 'Guess more!! guess more!!';
+      lastResult.style.backgroundColor = '#CA3542';
+      if(userGuess < randomNumber) {
+        lowOrHi.textContent = 'Sorry! it was too low!' ;
+      } else if(userGuess > randomNumber) {
+        lowOrHi.textContent = 'Sorry!it was too high!';
+      }
+    }
+
+    guessCount++;
+    x--;
+    if(userGuess !== randomNumber){
+    chance.textContent = 'you have ' + x + ' chance left!';
+    if(guessCount === 6){
+      chance.textContent = 'Look like someone wish for more luck,you have ' + x + ' chance left!';
+    }
+    if(guessCount === 8){
+      chance.textContent = 'Bad day huh?,you have ' + x + ' chance left!';
+    }
+    if(guessCount === 10){
+      chance.textContent = 'Last chance!! Wanna pray? take your time then~';
+    }
+    if(guessCount === 11){
+      chance.textContent = 'This is not the end of the world anyway,Lets start agian!';
+    }
+    }
+    guessField.value = '';
+    guessField.focus();
+  }
+
+  guessSubmit.addEventListener('click', checkGuess);
+  resetButton.addEventListener('click', resetGame);
+ 
+  function setGameOver() {
+    guessField.disabled = true;
+    guessSubmit.disabled = true;
+    resetButton.style.visibility='';
+    // resetButton = document.createElement('button');
+    // resetButton.textContent = 'Start new game';
+    // document.body.appendChild(resetButton);
+    // resetButton.addEventListener('click', resetGame);
+  }
+
+  function resetGame() {
+    guessCount = 1;
+    const resetParas = document.querySelectorAll('.resultParas p');
+    for(let i = 0 ; i < resetParas.length ; i++) {
+      resetParas[i].textContent = '';
+    }
+
+    // resetButton.parentNode.removeChild(resetButton);
+    x = 10;
+    chance.textContent = 'you have ' + x + ' chance left!';
+    guessField.disabled = false;
+    guessSubmit.disabled = false;
+    guessField.value = '';
+    guessField.focus();
+    lastResult.style.backgroundColor = 'white';
+    randomNumber = Math.floor(Math.random() * 100) + 1;
+    resetButton.style.visibility='hidden';
+  }
+</script>
+
+<script>
+// Script to open and close sidebar
+function w3_open() {
+  document.getElementById("mySidebar").style.display = "block";
+  document.getElementById("myOverlay").style.display = "block";
+}
+
+function w3_close() {
+  document.getElementById("mySidebar").style.display = "none";
+  document.getElementById("myOverlay").style.display = "none";
+}
+
+// Modal Image Gallery
+function onClick(element) {
+  document.getElementById("img01").src = element.src;
+  document.getElementById("modal01").style.display = "block";
+  var captionText = document.getElementById("caption");
+  captionText.innerHTML = element.alt;
+}
+
+</script>
+
+
+</body>
+</html>
